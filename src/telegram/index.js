@@ -23,10 +23,14 @@ module.exports = {
   async sendNotification({ title, description, price, url }) {
     const users = await User.find({});
     for (user in users) {
-      bot.sendMessage(
-        user.id,
-        `${title}\n\n${description}\n${price ? "Цена: " + price : ""}\n\n${url}`
-      );
+      if (user.id) {
+        bot.sendMessage(
+          user.id,
+          `${title}\n\n${description}\n${
+            price ? "Цена: " + price : ""
+          }\n\n${url}`
+        );
+      }
     }
   },
 };
