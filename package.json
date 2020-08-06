@@ -1,0 +1,25 @@
+{
+  "name": "fl_notify",
+  "version": "0.1",
+  "main": "src/app.js/index.js",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
+    "config": "^3.3.1",
+    "iconv-lite": "^0.5.1",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.9.11",
+    "node-fetch": "^2.6.0",
+    "node-telegram-bot-api": "^0.50.0",
+    "nodemon": "^2.0.3"
+  },
+  "devDependencies": {
+    "admin-bro": "^2.3.0",
+    "admin-bro-expressjs": "^2.0.5",
+    "admin-bro-mongoose": "^0.5.2",
+    "express": "^4.17.1",
+    "express-formidable": "^1.2.0",
+    "express-session": "^1.17.1"
+  }
+}
