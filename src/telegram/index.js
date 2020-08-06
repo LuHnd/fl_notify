@@ -13,7 +13,6 @@ module.exports = {
     });
   },
   saveUser(user) {
-    console.log(user);
     let doc = new User({
       ...user,
     });
@@ -23,12 +22,10 @@ module.exports = {
   async sendNotification({ title, description, price, url }) {
     const users = await User.find({});
     for (user in users) {
-      if (user.id) {
+      if (users[user].id) {
         bot.sendMessage(
-          user.id,
-          `${title}\n\n${description}\n${
-            price ? "Цена: " + price : ""
-          }\n\n${url}`
+          users[user].id,
+          `${title}\n\n${description}\n${price ? "Цена: " + price : ""}\n${url}`
         );
       }
     }
