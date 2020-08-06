@@ -9,11 +9,11 @@ async function init() {
   setInterval(function () {
     weblancer.init(async () => {
       let res = await weblancer.iterateCategories();
-      console.log(res);
 
       Object.keys(res).forEach(function (key) {
         if (res[key].new.length) {
           for (msg in res[key].new) {
+            console.log(res[key].new[msg]);
             bot.sendNotification(res[key].new[msg]);
           }
         }

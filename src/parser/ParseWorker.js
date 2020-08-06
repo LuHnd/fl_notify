@@ -32,9 +32,9 @@ class ParseWorker {
       .map((i, el) => {
         return {
           title: $(el).find(selectors.title).text(),
-          description: $(el).find(selectors.description).text(),
+          description: $(el).find(selectors.description).text().split("\n")[0],
           price: $(el).find(selectors.price).text(),
-          url: $(el).find(selectors.title).attr("href"),
+          url: base + $(el).find(selectors.title).attr("href"),
         };
       })
       .get();
