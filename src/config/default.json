@@ -1,6 +1,0 @@
-{
-    "db": {
-        "uri": "mongodb+srv://mern-admin:qHiXhsoWfgAk47NN@mern-rdbfj.mongodb.net/test?retryWrites=true&w=majority"
-    },
-    "tg_bot_key": "1301555662:AAHhhOXX9rM5N9ch2PMZ2sxFk9b-gu2E4tY"
-}
