@@ -10,6 +10,7 @@ const config = require("config");
 const Category = require("../db/models/Category.js");
 const Selector = require("../db/models/Selector.js");
 const Source = require("../db/models/Source.js");
+const Offer = require("../db/models/Offer.js");
 const Subcategory = require("../db/models/Subcategory.js");
 
 class ParseWorker {
@@ -67,18 +68,28 @@ class ParseWorker {
       });
   };
 
+  saveAndGetNew = async (category_id, parsedData) => {
+    let newOffers = [];
+    for (let item in parsedData) {
+      let { title, description, price, category, url } = parsedData[item];
+      let offer = new Offer({ title, description, price, category, url });
+
+      await offer.save((err) => {
+        if (!err) {
+          newOffers.push(parsedData[item]);
+        }
+      });
+    }
+
+    return newOffers;
+  };
+
   parseAndSave = async ({ title, path, _id }, selector) => {
     try {
       const parsedData = await this.parse(this.sourceData.base, path, selector);
-
       let sub = await Subcategory.findOne({ _id });
 
-      let newOffers = _.differenceBy(sub.lastOffers, parsedData, "title");
-
-      sub.lastOffers = parsedData;
-      await sub.save();
-
-      return newOffers;
+      return this.saveAndGetNew(_id, parsedData);
     } catch (err) {
       return [];
     }
