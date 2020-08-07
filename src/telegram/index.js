@@ -25,7 +25,10 @@ module.exports = {
       if (users[user].id) {
         bot.sendMessage(
           users[user].id,
-          `${title}\n\n${description}\n${price ? "Цена: " + price : ""}\n${url}`
+          `*${title}*\n\n${description}\n\n${
+            price ? "Цена: " + price : ""
+          }\n\n${url}`,
+          { parse_mode: "Markdown" }
         );
       }
     }
