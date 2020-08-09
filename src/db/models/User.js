@@ -5,6 +5,7 @@ const schema = new Schema({
   first_name: { type: String },
   last_name: { type: String },
   username: { type: String },
+  categories: [{ type: Types.ObjectId, ref: "Subcategory" }],
 });
 
 module.exports = model("User", schema);

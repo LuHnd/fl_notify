@@ -42,6 +42,9 @@ module.exports = {
       console.log(err);
     }
   },
+  getCategory: async (title) => {
+    return await Subcategory.find({ category: title });
+  },
   setCategories: async (sourceName, categories) => {
     try {
       for (let category in categories) {
