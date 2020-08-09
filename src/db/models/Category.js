@@ -1,8 +1,8 @@
-const { Schema, model, Types } = require('mongoose')
+const { Schema, model, Types } = require("mongoose");
 
 const schema = new Schema({
-    title: { type: String },
-    subcategories: [{type: Types.ObjectId, ref: 'Subcategory'}]
-})
+  title: { type: String, unique: true },
+  subcategories: [{ type: Types.ObjectId, ref: "Subcategory" }],
+});
 
-module.exports = model('Category', schema)
+module.exports = model("Category", schema);

@@ -42,4 +42,44 @@ module.exports = {
       console.log(err);
     }
   },
+  setCategories: async (sourceName, categories) => {
+    try {
+      for (let category in categories) {
+        for (subcategory in categories[category].subcategories) {
+          await Subcategory.update(
+            { path: categories[category].subcategories[subcategory].path },
+            {
+              ...categories[category].subcategories[subcategory],
+              category: categories[category].title,
+            },
+            { upsert: true }
+          );
+        }
+
+        let subcategories = await Subcategory.find({
+          category: categories[category].title,
+        }).exec();
+        await Category.update(
+          { title: categories[category].title },
+          { subcategories: subcategories.map(({ _id }) => _id) },
+          { upsert: true }
+        );
+      }
+
+      let dbCategories = await Category.find({});
+
+      console.log(dbCategories);
+
+      await Source.findOneAndUpdate(
+        {
+          title: sourceName,
+        },
+        { categories: dbCategories }
+      );
+
+      console.log("Categories update done");
+    } catch (err) {
+      console.log(err);
+    }
+  },
 };
