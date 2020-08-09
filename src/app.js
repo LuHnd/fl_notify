@@ -1,4 +1,4 @@
-const startDB = require("./db");
+const db = require("./db");
 const ParseWorker = require("./parser/ParseWorker.js");
 const bot = require("./telegram");
 
