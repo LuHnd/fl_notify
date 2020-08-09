@@ -17,7 +17,7 @@ function updOrders(fl_site) {
 }
 
 async function init() {
-  await startDB();
+  await db.startDB();
   const weblancer = new ParseWorker("Weblancer");
 
   setInterval(function () {
