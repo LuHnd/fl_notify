@@ -9,7 +9,7 @@ function updOrders(fl_site) {
     Object.keys(res).forEach(function (key) {
       if (res[key].new.length) {
         for (msg in res[key].new) {
-          bot.sendNotification(res[key].new[msg]);
+          bot.sendNotification(res[key].new[msg], res[key]);
         }
       }
     });
@@ -22,9 +22,17 @@ async function init() {
 
   setInterval(function () {
     updOrders(weblancer);
-  }, 30000);
+  }, 2 * 60000);
 
   //updOrders(weblancer);
+
+  // let categories = await weblancer.getCategories(
+  //   "https://www.weblancer.net",
+  //   "/jobs/"
+  // );
+  // db.setCategories("Weblancer", categories);
+
+  //console.log(db.getCategories());
 }
 
 init();

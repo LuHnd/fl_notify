@@ -4,7 +4,7 @@ const Category = require("./models/Category.js");
 const Subcategory = require("./models/Subcategory.js");
 const Source = require("../db/models/Source.js");
 const Selector = require("../db/models/Selector.js");
-
+const User = require("../db/models/User.js");
 module.exports = {
   startDB: async () => {
     try {
@@ -18,6 +18,25 @@ module.exports = {
       process.exit(1);
     }
   },
+  user: {
+    getUser: async (id) => {
+      return await User.findOne({ id });
+    },
+    updateCategory: async (id, category) => {
+      return await User.findOne({ id }).then(async ({ categories }) => {
+        if (categories.includes(category)) {
+          categories.splice(categories.indexOf(category), 1);
+        } else {
+          categories.push(category);
+        }
+
+        await User.update({ id }, { categories });
+
+        return await User.findOne({ id });
+      });
+    },
+  },
+
   getSource: async function (sourceName) {
     try {
       return await Source.findOne({
@@ -70,8 +89,6 @@ module.exports = {
       }
 
       let dbCategories = await Category.find({});
-
-      console.log(dbCategories);
 
       await Source.findOneAndUpdate(
         {
