@@ -26,6 +26,28 @@ class ParseWorker {
     });
   };
 
+  getCategories = async (base, url) => {
+    const $ = cheerio.load(await this.loadPage(base, url));
+    const data = $(".category_tree .collapse")
+      .map((i, el) => {
+        let category = $(el).parent().children("a").text();
+        return {
+          subcategories: $(el)
+            .find("li")
+            .map((i, el) => {
+              return {
+                title: $(el).find("a").text(),
+                path: $(el).find("a").attr("href"),
+              };
+            })
+            .get(),
+          title: category,
+        };
+      })
+      .get();
+    return data;
+  };
+
   parse = async (base, url, selectors) => {
     const $ = cheerio.load(await this.loadPage(base, url));
 
