@@ -20,7 +20,6 @@ class ParseWorker {
   }
 
   loadPage = async (base, url) => {
-    console.log(base, url);
     return fetch(base + url).then((res) => {
       return res.buffer().then((buffer) => iconv.decode(buffer, "win1251"));
     });
@@ -92,15 +91,7 @@ class ParseWorker {
 
   saveAndGetNew = async (category_id, parsedData) => {
     let newOffers = [];
-    for (let item in parsedData) {
-      let { title, description, price, category, url } = parsedData[item];
-      let offer = new Offer({ title, description, price, category, url });
 
-      await offer.save((err) => {
-        if (!err) {
-          newOffers.push(parsedData[item]);
-        }
-      });
     for (let item = 0; item < parsedData.length; item++) {
       let { title, description, price, category, url } = parsedData[item];
       let offer = await new Offer({
