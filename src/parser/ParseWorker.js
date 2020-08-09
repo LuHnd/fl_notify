@@ -101,8 +101,24 @@ class ParseWorker {
           newOffers.push(parsedData[item]);
         }
       });
+    for (let item = 0; item < parsedData.length; item++) {
+      let { title, description, price, category, url } = parsedData[item];
+      let offer = await new Offer({
+        title,
+        description,
+        price,
+        category: category_id,
+        url,
+      })
+        .save()
+        .catch((err) => err.code)
+        .then((err) => {
+          if (err != 11000) {
+            newOffers.push(parsedData[item]);
+          }
+          return;
+        });
     }
-
     return newOffers;
   };
 
