@@ -7,6 +7,7 @@ const iconv = require("iconv-lite");
 const mongoose = require("mongoose");
 
 const config = require("config");
+const db = require("../db");
 const Category = require("../db/models/Category.js");
 const Selector = require("../db/models/Selector.js");
 const Source = require("../db/models/Source.js");
@@ -69,24 +70,8 @@ class ParseWorker {
   };
 
   fetchSourceData = async (sourceName) => {
-    this.sourceData = await Source.findOne({
-      title: sourceName,
-    })
-      .populate({
-        path: "selector",
-        model: Selector,
-        select: "title container description price",
-      })
-      .populate({
-        path: "categories",
-        model: Category,
-        select: "title -_id",
-        populate: {
-          path: "subcategories",
-          model: Subcategory,
-          select: "title path lastOffers _id",
-        },
-      });
+    this.sourceData = await db.getSource(sourceName);
+    console.log(this.sourceData);
   };
 
   saveAndGetNew = async (category_id, parsedData) => {
