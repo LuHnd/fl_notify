@@ -1,3 +1,4 @@
+process.env.NODE_CONFIG_DIR = "../config";
 const db = require("./db");
 const ParseWorker = require("./parser/ParseWorker.js");
 const telegram = require("./telegram");

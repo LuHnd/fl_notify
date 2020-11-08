@@ -1,13 +1,9 @@
-process.env.NODE_CONFIG_DIR = "../config";
-
 const _ = require("lodash/array.js");
 const cheerio = require("cheerio");
 const fetch = require("node-fetch");
 const iconv = require("iconv-lite");
 const db = require("../db");
 const Offer = require("../db/models/Offer.js");
-const Subcategory = require("../db/models/Subcategory.js");
-
 class ParseWorker {
   constructor(sourceName) {
     this.sourceName = sourceName;
