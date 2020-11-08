@@ -6,6 +6,7 @@ const schema = new Schema({
   last_name: { type: String },
   username: { type: String },
   categories: [],
+  time: { type: Date, default: Date.now },
 });
 
 module.exports = model("User", schema);
