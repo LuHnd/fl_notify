@@ -3,26 +3,26 @@ const ParseWorker = require("./parser/ParseWorker.js");
 const bot = require("./telegram");
 
 function updOrders(fl_site) {
-  fl_site.init(async () => {
-    let res = await fl_site.iterateCategories();
-    console.log(res);
-    Object.keys(res).forEach(function (key) {
-      if (res[key].new.length) {
-        for (msg in res[key].new) {
-          bot.sendNotification(res[key].new[msg], res[key]);
+  fl_site.init(async () =>
+    fl_site.iterateCategories(function (newOffers) {
+      Object.keys(newOffers).forEach(function (key) {
+        if (newOffers[key].new.length) {
+          for (let msg in newOffers[key].new) {
+            bot.sendNotification(newOffers[key].new[msg], key);
+          }
         }
-      }
-    });
-  });
+      });
+    })
+  );
 }
 
 async function init() {
   await db.startDB();
   const weblancer = new ParseWorker("Weblancer");
-
+  updOrders(weblancer);
   setInterval(function () {
     updOrders(weblancer);
-  }, 2 * 60000);
+  }, 5 * 60000);
 
   //updOrders(weblancer);
 

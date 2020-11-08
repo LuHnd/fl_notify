@@ -4,13 +4,7 @@ const _ = require("lodash/array.js");
 const cheerio = require("cheerio");
 const fetch = require("node-fetch");
 const iconv = require("iconv-lite");
-const mongoose = require("mongoose");
-
-const config = require("config");
 const db = require("../db");
-const Category = require("../db/models/Category.js");
-const Selector = require("../db/models/Selector.js");
-const Source = require("../db/models/Source.js");
 const Offer = require("../db/models/Offer.js");
 const Subcategory = require("../db/models/Subcategory.js");
 
@@ -79,7 +73,7 @@ class ParseWorker {
 
     for (let item = 0; item < parsedData.length; item++) {
       let { title, description, price, category, url } = parsedData[item];
-      let offer = await new Offer({
+      await new Offer({
         title,
         description,
         price,
@@ -101,27 +95,24 @@ class ParseWorker {
   parseAndSave = async ({ title, path, _id }, selector) => {
     try {
       const parsedData = await this.parse(this.sourceData.base, path, selector);
-      let sub = await Subcategory.findOne({ _id });
-
       return this.saveAndGetNew(_id, parsedData);
     } catch (err) {
       return [];
     }
   };
 
-  iterateCategories = async () => {
-    let newOffers = {};
-
+  iterateCategories = async (iterator) => {
     for (const category of this.sourceData.categories) {
+      let newOffers = {};
       for (const sub of category.subcategories) {
         newOffers[sub.title] = {
           new: await this.parseAndSave(sub, this.sourceData.selector),
           id: sub._id,
         };
       }
-    }
 
-    return newOffers;
+      iterator(newOffers);
+    }
   };
 
   init = async (callback) => {
