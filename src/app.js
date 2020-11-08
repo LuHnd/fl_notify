@@ -1,6 +1,6 @@
 const db = require("./db");
 const ParseWorker = require("./parser/ParseWorker.js");
-const bot = require("./telegram");
+const telegram = require("./telegram");
 
 function updOrders(fl_site) {
   fl_site.init(async () =>
@@ -8,7 +8,7 @@ function updOrders(fl_site) {
       Object.keys(newOffers).forEach(function (key) {
         if (newOffers[key].new.length) {
           for (let msg in newOffers[key].new) {
-            bot.sendNotification(newOffers[key].new[msg], key);
+            telegram.sendNotification(newOffers[key].new[msg], key);
           }
         }
       });
@@ -23,17 +23,7 @@ async function init() {
   setInterval(function () {
     updOrders(weblancer);
   }, 5 * 60000);
-
-  //updOrders(weblancer);
-
-  // let categories = await weblancer.getCategories(
-  //   "https://www.weblancer.net",
-  //   "/jobs/"
-  // );
-  // db.setCategories("Weblancer", categories);
-
-  //console.log(db.getCategories());
 }
 
 init();
-bot.startListener();
+telegram.startListener();
