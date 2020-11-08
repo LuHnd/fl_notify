@@ -51,12 +51,19 @@ async function getInlineKeyboard(
 
 module.exports = {
   startListener() {
-    bot.onText(/\/start/, ({ from, chat }, match) => {
+    bot.onText(/\/start/, async ({ from, chat }, match) => {
       bot.sendMessage(
         chat.id,
         "Уведомления о новых заказах на сайте Weblancer.net\nДля настройки категорий воспользуйтесь командой /category"
       );
       this.saveUser(from);
+
+      const { categories } = await db.getSource("Weblancer");
+      await bot.sendMessage(
+        chat.id,
+        "Категории",
+        await getInlineKeyboard(categories, "sc")
+      );
     });
 
     bot.onText(/\/category/, async ({ chat }) => {
@@ -135,9 +142,9 @@ module.exports = {
 
     doc.save();
   },
-  async sendNotification({ title, description, price, url }, category) {
-    const users = await User.find({ category });
-    console.log(users);
+  async sendNotification({ title, description, price, url }, categories) {
+    const users = await User.find({ categories });
+    console.log(new Date(), title, "sent to", users.length, "users");
     for (user in users) {
       if (users[user].id) {
         bot
@@ -145,7 +152,10 @@ module.exports = {
             users[user].id,
             `${title}\n\n${description}\n\n${
               price ? "Цена: " + price : ""
-            }\n\n${url}`
+            }\n\n${url}\n\n#${categories.replace(
+              /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi,
+              "_"
+            )}`
           )
           .catch((err) => {
             console.log(err);
